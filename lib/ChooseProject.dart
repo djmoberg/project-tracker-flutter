@@ -55,6 +55,7 @@ class _MyChooseProjectState extends State<MyChooseProject> {
     return loading
         ? Center(child: CircularProgressIndicator())
         : ListView.builder(
+            padding: EdgeInsets.all(16.0),
             itemCount: _projects.length,
             itemBuilder: (context, index) {
               return ListTile(
