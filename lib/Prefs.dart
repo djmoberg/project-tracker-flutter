@@ -24,9 +24,9 @@ class Prefs {
 
   static Future<RUser> _getUser() async {
     String userString = await _prefs.then((prefs) {
-      return (prefs.getString("user") ?? "");
+      return (prefs.getString("user") ?? null);
     });
-    return RUser.fromJson(json.decode(userString));
+    return userString == null ? null : RUser.fromJson(json.decode(userString));
   }
 
   Future setUser(value) async {
