@@ -145,7 +145,7 @@ class _MyWorkTimerState extends State<MyWorkTimer> {
                                 MaterialPageRoute(builder: (context) {
                               return AddDialog(_startTime, stopTime);
                             }));
-                            if (workAdded) {
+                            if (workAdded != null && workAdded) {
                               Scaffold.of(context).showSnackBar(
                                   SnackBar(content: Text("Work added")));
                               _timer.cancel();

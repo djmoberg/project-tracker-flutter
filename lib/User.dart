@@ -27,6 +27,7 @@ class _MyUserState extends State<MyUser> {
 
     return Scaffold(
       body: _views[_index],
+      resizeToAvoidBottomPadding: false,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
         onTap: (index) {

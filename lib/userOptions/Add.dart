@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'package:project_tracker_test/utils.dart';
 import 'package:project_tracker_test/utils2.dart';
 
 class Add extends StatelessWidget {
@@ -21,6 +22,19 @@ class _MyAddState extends State<MyAdd> {
   int fromM = 0;
   int toH = DateTime.now().hour;
   int toM = 15;
+  String _comment = "";
+  bool _loading = false;
+  TextEditingController _controller;
+
+  bool _validForm() {
+    return _comment != "";
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -258,7 +272,45 @@ class _MyAddState extends State<MyAdd> {
           ),
         ),
         TextField(
-          // maxLines: 5,
+          maxLines: 5,
+          controller: _controller,
+          onChanged: (value) {
+            setState(() {
+              _comment = value;
+            });
+          },
+        ),
+        SizedBox(
+          height: 16.0,
+        ),
+        RaisedButton(
+          child: Text("Add"),
+          onPressed: !_validForm() || _loading
+              ? null
+              : () async {
+                  setState(() {
+                    _loading = true;
+                  });
+                  await addWork({
+                    "addedUsers": [],
+                    "comment": _comment,
+                    "workDate": convertDateBackend(_date),
+                    "workFrom": "${withZero(fromH)}:${withZero(fromM)}",
+                    "workTo": "${withZero(toH)}:${withZero(toM)}"
+                  });
+                  setState(() {
+                    _date = DateTime.now();
+                    fromH = DateTime.now().hour;
+                    fromM = 0;
+                    toH = DateTime.now().hour;
+                    toM = 15;
+                    _comment = "";
+                    _loading = false;
+                  });
+                  _controller.clear();
+                  Scaffold.of(context)
+                      .showSnackBar(SnackBar(content: Text("Work added")));
+                },
         ),
       ],
     );
