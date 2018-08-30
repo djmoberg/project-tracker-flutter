@@ -21,9 +21,47 @@ String convertDate(DateTime date) {
   return "${withZero(date.day)}.${withZero(date.month)}.${date.year}";
 }
 
+String convertDateBackend(DateTime date) {
+  return "${date.year}-${withZero(date.month)}-${withZero(date.day)}";
+}
+
+String convertDateFull(DateTime date) {
+  return convertDate(date) +
+      ", ${withZero(date.hour)}:${withZero(date.minute)}:${withZero(date.second)}";
+}
+
 String withZero(int numb) {
   if (numb < 10) {
     return "0$numb";
   }
   return numb.toString();
+}
+
+String formatTime(int time) {
+  DateTime dt = DateTime.fromMillisecondsSinceEpoch(time);
+  String h = (dt.hour - 1) < 10 ? "0${(dt.hour - 1)}" : "${(dt.hour)}"; //??
+  String m = dt.minute < 10 ? "0${dt.minute}" : "${dt.minute}";
+  String s = dt.second < 10 ? "0${dt.second}" : "${dt.second}";
+
+  return "$h:$m:$s";
+}
+
+String formatTimeRounded(int time) {
+  DateTime dt = DateTime.fromMillisecondsSinceEpoch(time);
+  String h = (dt.hour) < 10 ? "0${(dt.hour)}" : "${(dt.hour)}"; //??
+
+  return "$h:${roundMinutes(dt.minute)}";
+}
+
+String roundMinutes(m) {
+  if (m <= 7)
+    return "00";
+  else if (m >= 8 && m <= 22)
+    return "15";
+  else if (m >= 23 && m <= 37)
+    return "30";
+  else if (m >= 38 && m <= 52)
+    return "45";
+  else
+    return "00";
 }

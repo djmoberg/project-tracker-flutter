@@ -7,7 +7,8 @@ import 'package:project_tracker_test/Prefs.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-const backend = "https://project-tracker-backend.herokuapp.com";
+const backend2 = "https://project-tracker-backend.herokuapp.com";
+const backend = "http://192.168.38.110:3000";
 
 class Cookie {
   static Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -89,4 +90,51 @@ Future<Project> getProject(int id) async {
     throw Exception("Failed to load projects");
   }
   return project;
+}
+
+Future<int> getWorkTimer() async {
+  RWorkTimer timer;
+  http.Response response = await http.get(backend + "/workTimer",
+      headers: {"cookie": await Cookie.getCookie()});
+  if (response.statusCode == 200) {
+    timer = RWorkTimer.fromJson(json.decode(response.body));
+  } else {
+    throw Exception("Failed to load timer");
+  }
+  return timer.startTime;
+}
+
+Future setWorkTimer(int startTime) async {
+  http.Response response = await http.post(backend + "/workTimer/new",
+      headers: {"cookie": await Cookie.getCookie()},
+      body: {"startTime": startTime.toString()});
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to set timer");
+  }
+}
+
+Future deleteWorkTimer() async {
+  http.Response response = await http.delete(backend + "/workTimer",
+      headers: {"cookie": await Cookie.getCookie()});
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to delete timer");
+  }
+}
+
+Future addWork(Map<String, dynamic> work) async {
+  http.Response response = await http.post(backend + "/work/add",
+      headers: {
+        "cookie": await Cookie.getCookie(),
+        "Content-Type": "application/json"
+      },
+      body: json.encode(work));
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to add work");
+  }
 }

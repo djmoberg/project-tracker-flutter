@@ -37,3 +37,13 @@ class RUser {
     return RUser(loggedIn: json["loggedIn"], user: json["user"]);
   }
 }
+
+class RWorkTimer {
+  int startTime;
+
+  RWorkTimer({this.startTime});
+
+  factory RWorkTimer.fromJson(Map<String, dynamic> json) {
+    return RWorkTimer(startTime: json["startTime"]);
+  }
+}
