@@ -27,6 +27,19 @@ class Project {
   }
 }
 
+class ProjectSearch {
+  final int id;
+  final String name;
+  final String description;
+
+  ProjectSearch({this.id, this.name, this.description});
+
+  factory ProjectSearch.fromJson(Map<String, dynamic> json) {
+    return ProjectSearch(
+        id: json["id"], name: json["name"], description: json["description"]);
+  }
+}
+
 class RUser {
   bool loggedIn;
   Map<String, dynamic> user;

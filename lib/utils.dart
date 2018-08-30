@@ -173,3 +173,34 @@ Future sendNewPassword(Map<String, dynamic> data) async {
     throw Exception("Failed to send new password");
   }
 }
+
+Future registerProject(Map<String, dynamic> data) async {
+  http.Response response = await http.post(backend + "/project/register",
+      headers: {
+        "cookie": await Cookie.getCookie(),
+        "Content-Type": "application/json"
+      },
+      body: json.encode(data));
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to register project");
+  }
+}
+
+Future<List<ProjectSearch>> findProjects(value) async {
+  List<ProjectSearch> res = List();
+  http.Response response = await http.get(
+    backend + "/projects/find/" + value,
+    headers: {"cookie": await Cookie.getCookie()},
+  );
+  if (response.statusCode == 200) {
+    List<dynamic> resD = json.decode(response.body);
+    resD.forEach((pS) {
+      res.add(ProjectSearch.fromJson(pS));
+    });
+  } else {
+    throw Exception("Failed to find projects");
+  }
+  return res;
+}

@@ -101,7 +101,7 @@ class _MyControlPanelState extends State<MyControlPanel> {
             _loading
                 ? Center(child: CircularProgressIndicator())
                 : ChooseProject(_projects, _onLogout, _update),
-            RegisterProject(),
+            RegisterProject(() => _getProjects()),
             JoinProject(),
           ],
         ),
