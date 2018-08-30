@@ -1,6 +1,7 @@
 // import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:project_tracker_test/Settings.dart';
 
 import 'package:project_tracker_test/utils.dart';
 import 'package:project_tracker_test/ChooseProject.dart';
@@ -76,22 +77,7 @@ class _MyControlPanelState extends State<MyControlPanel> {
                 decoration: BoxDecoration(
                     color: Theme.of(context).secondaryHeaderColor),
               ),
-              ListTile(
-                title: Text("Dark Theme"),
-                trailing: Switch(
-                  onChanged: (bool value) async {
-                    await Prefs().setTheme(value ? "dark" : "light");
-                    _update();
-                  },
-                  value: Prefs().theme == "dark",
-                ),
-              ),
-              ListTile(
-                title: Text("Logout"),
-                onTap: () async {
-                  _onLogout();
-                },
-              ),
+              Settings(_onLogout, _update),
             ],
           ),
         ),
@@ -115,7 +101,7 @@ class _MyControlPanelState extends State<MyControlPanel> {
           children: <Widget>[
             _loading
                 ? Center(child: CircularProgressIndicator())
-                : ChooseProject(_projects, _onLogout),
+                : ChooseProject(_projects, _onLogout, _update),
             RegisterProject(),
             JoinProject(),
           ],

@@ -9,31 +9,34 @@ import 'package:project_tracker_test/ProjectExplorer.dart';
 class ChooseProject extends StatelessWidget {
   final List<Map<String, dynamic>> _projects;
   final VoidCallback _onLogout;
+  final VoidCallback _update;
 
-  ChooseProject(this._projects, this._onLogout);
+  ChooseProject(this._projects, this._onLogout, this._update);
 
   @override
   Widget build(BuildContext context) {
-    return MyChooseProject(_projects, _onLogout);
+    return MyChooseProject(_projects, _onLogout, _update);
   }
 }
 
 class MyChooseProject extends StatefulWidget {
   final List<Map<String, dynamic>> _projects;
   final VoidCallback _onLogout;
+  final VoidCallback _update;
 
-  MyChooseProject(this._projects, this._onLogout);
+  MyChooseProject(this._projects, this._onLogout, this._update);
 
   @override
   _MyChooseProjectState createState() =>
-      _MyChooseProjectState(_projects, _onLogout);
+      _MyChooseProjectState(_projects, _onLogout, _update);
 }
 
 class _MyChooseProjectState extends State<MyChooseProject> {
   final List<Map<String, dynamic>> _projects;
   final VoidCallback _onLogout;
+  final VoidCallback _update;
 
-  _MyChooseProjectState(this._projects, this._onLogout);
+  _MyChooseProjectState(this._projects, this._onLogout, this._update);
 
   bool loading = false;
 
@@ -46,7 +49,7 @@ class _MyChooseProjectState extends State<MyChooseProject> {
       loading = false;
     });
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return ProjectExplorer(project, _onLogout);
+      return ProjectExplorer(project, _onLogout, _update);
     }));
   }
 

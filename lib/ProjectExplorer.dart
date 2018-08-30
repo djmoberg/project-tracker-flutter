@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:project_tracker_test/ResponseObjects.dart';
 import 'package:project_tracker_test/Admin.dart';
 import 'package:project_tracker_test/Overview.dart';
+import 'package:project_tracker_test/Settings.dart';
 import 'package:project_tracker_test/User.dart';
 import 'package:project_tracker_test/WorkTimer.dart';
 import 'package:project_tracker_test/Prefs.dart';
@@ -10,31 +11,34 @@ import 'package:project_tracker_test/Prefs.dart';
 class ProjectExplorer extends StatelessWidget {
   final Project _project;
   final VoidCallback _onLogout;
+  final VoidCallback _update;
 
-  ProjectExplorer(this._project, this._onLogout);
+  ProjectExplorer(this._project, this._onLogout, this._update);
 
   @override
   Widget build(BuildContext context) {
-    return MyProjectExplorer(_project, _onLogout);
+    return MyProjectExplorer(_project, _onLogout, _update);
   }
 }
 
 class MyProjectExplorer extends StatefulWidget {
   final Project _project;
   final VoidCallback _onLogout;
+  final VoidCallback _update;
 
-  MyProjectExplorer(this._project, this._onLogout);
+  MyProjectExplorer(this._project, this._onLogout, this._update);
 
   @override
   _MyProjectExplorerState createState() =>
-      _MyProjectExplorerState(_project, _onLogout);
+      _MyProjectExplorerState(_project, _onLogout, _update);
 }
 
 class _MyProjectExplorerState extends State<MyProjectExplorer> {
   final Project _project;
   final VoidCallback _onLogout;
+  final VoidCallback _update;
 
-  _MyProjectExplorerState(this._project, this._onLogout);
+  _MyProjectExplorerState(this._project, this._onLogout, this._update);
 
   Widget _route;
   RUser _user = Prefs().user;
@@ -144,14 +148,10 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
                 Navigator.pop(context);
               },
             ),
-            ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text("Logout"),
-              onTap: () {
-                _onLogout();
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
+            Settings(
+              _onLogout,
+              _update,
+              pop: true,
             ),
           ],
         ),
