@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project_tracker_test/PasswordReset.dart';
+import 'package:project_tracker_test/RegisterUser.dart';
 
 import 'package:project_tracker_test/utils.dart';
 
@@ -125,19 +127,19 @@ class MyCustomFormState extends State<MyCustomForm> {
                       FlatButton(
                         child: Text("Create account"),
                         onPressed: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => Register()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterUser()));
                         },
                       ),
                       FlatButton(
                         child: Text("Forgot password?"),
                         onPressed: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => PasswordReset()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PasswordReset()));
                         },
                       ),
                     ],

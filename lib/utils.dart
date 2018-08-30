@@ -140,3 +140,36 @@ Future addWork(Map<String, dynamic> work) async {
   }
   return res;
 }
+
+Future<bool> userExists(value) async {
+  bool res = true;
+  http.Response response = await http.get(
+    backend + "/user/exists/" + value,
+  );
+  if (response.statusCode == 200) {
+    res = response.body == "true";
+  } else {
+    throw Exception("Failed to load user exists");
+  }
+  return res;
+}
+
+Future registerUser(Map<String, dynamic> data) async {
+  http.Response response = await http.post(backend + "/user/register",
+      headers: {"Content-Type": "application/json"}, body: json.encode(data));
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to register user");
+  }
+}
+
+Future sendNewPassword(Map<String, dynamic> data) async {
+  http.Response response = await http.post(backend + "/user/sendNewPassword",
+      headers: {"Content-Type": "application/json"}, body: json.encode(data));
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to send new password");
+  }
+}

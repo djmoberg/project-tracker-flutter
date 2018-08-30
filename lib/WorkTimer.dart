@@ -76,7 +76,9 @@ class _MyWorkTimerState extends State<MyWorkTimer> {
   @override
   void dispose() {
     super.dispose();
-    _timer.cancel();
+    if (_timer != null && _timer.isActive) {
+      _timer.cancel();
+    }
   }
 
   @override

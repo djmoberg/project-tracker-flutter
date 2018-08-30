@@ -7,7 +7,6 @@ import 'package:project_tracker_test/utils.dart';
 import 'package:project_tracker_test/ChooseProject.dart';
 import 'package:project_tracker_test/RegisterProject.dart';
 import 'package:project_tracker_test/JoinProject.dart';
-import 'package:project_tracker_test/Prefs.dart';
 
 class ControlPanel extends StatelessWidget {
   final VoidCallback _onLogout;
