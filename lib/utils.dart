@@ -126,6 +126,7 @@ Future deleteWorkTimer() async {
 }
 
 Future addWork(Map<String, dynamic> work) async {
+  RAdd res;
   http.Response response = await http.post(backend + "/work/add",
       headers: {
         "cookie": await Cookie.getCookie(),
@@ -133,8 +134,9 @@ Future addWork(Map<String, dynamic> work) async {
       },
       body: json.encode(work));
   if (response.statusCode == 200) {
-    print(response.body);
+    res = RAdd.fromJson(json.decode(response.body));
   } else {
     throw Exception("Failed to add work");
   }
+  return res;
 }

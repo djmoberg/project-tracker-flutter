@@ -47,3 +47,14 @@ class RWorkTimer {
     return RWorkTimer(startTime: json["startTime"]);
   }
 }
+
+class RAdd {
+  String status;
+  List<dynamic> overview;
+
+  RAdd({this.status, this.overview});
+
+  factory RAdd.fromJson(Map<String, dynamic> json) {
+    return RAdd(status: json["status"], overview: json["overview"]);
+  }
+}

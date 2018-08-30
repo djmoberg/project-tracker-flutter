@@ -7,18 +7,30 @@ import 'package:project_tracker_test/utils2.dart';
 import 'package:project_tracker_test/AddDialog.dart';
 
 class WorkTimer extends StatelessWidget {
+  final VoidCallback _updateOverview;
+
+  WorkTimer(this._updateOverview);
+
   @override
   Widget build(BuildContext context) {
-    return MyWorkTimer();
+    return MyWorkTimer(_updateOverview);
   }
 }
 
 class MyWorkTimer extends StatefulWidget {
+  final VoidCallback _updateOverview;
+
+  MyWorkTimer(this._updateOverview);
+
   @override
-  _MyWorkTimerState createState() => _MyWorkTimerState();
+  _MyWorkTimerState createState() => _MyWorkTimerState(_updateOverview);
 }
 
 class _MyWorkTimerState extends State<MyWorkTimer> {
+  final VoidCallback _updateOverview;
+
+  _MyWorkTimerState(this._updateOverview);
+
   int _startTime;
   String _currentTime = "00:00:00";
   Timer _timer;
@@ -143,7 +155,8 @@ class _MyWorkTimerState extends State<MyWorkTimer> {
                           } else {
                             bool workAdded = await Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return AddDialog(_startTime, stopTime);
+                              return AddDialog(
+                                  _startTime, stopTime, _updateOverview);
                             }));
                             if (workAdded != null && workAdded) {
                               Scaffold.of(context).showSnackBar(

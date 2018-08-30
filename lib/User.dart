@@ -4,24 +4,36 @@ import 'package:project_tracker_test/userOptions/Add.dart';
 import 'package:project_tracker_test/userOptions/UserOverview.dart';
 
 class User extends StatelessWidget {
+  final VoidCallback _updateOverview;
+
+  User(this._updateOverview);
+
   @override
   Widget build(BuildContext context) {
-    return MyUser();
+    return MyUser(_updateOverview);
   }
 }
 
 class MyUser extends StatefulWidget {
+  final VoidCallback _updateOverview;
+
+  MyUser(this._updateOverview);
+
   @override
-  _MyUserState createState() => _MyUserState();
+  _MyUserState createState() => _MyUserState(_updateOverview);
 }
 
 class _MyUserState extends State<MyUser> {
+  final VoidCallback _updateOverview;
+
+  _MyUserState(this._updateOverview);
+
   int _index = 0;
 
   @override
   Widget build(BuildContext context) {
     List<Widget> _views = [
-      Add(),
+      Add(_updateOverview),
       UserOverview(),
     ];
 

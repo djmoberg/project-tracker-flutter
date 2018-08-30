@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project_tracker_test/Prefs.dart';
+import 'package:project_tracker_test/ResponseObjects.dart';
 
 import 'package:project_tracker_test/utils.dart';
 import 'package:project_tracker_test/utils2.dart';
@@ -6,31 +8,34 @@ import 'package:project_tracker_test/utils2.dart';
 class AddDialog extends StatelessWidget {
   final int _startTime;
   final int _stopTime;
+  final VoidCallback _updateOverview;
 
-  AddDialog(this._startTime, this._stopTime);
+  AddDialog(this._startTime, this._stopTime, this._updateOverview);
 
   @override
   Widget build(BuildContext context) {
-    return MyAddDialog(_startTime, _stopTime);
+    return MyAddDialog(_startTime, _stopTime, _updateOverview);
   }
 }
 
 class MyAddDialog extends StatefulWidget {
   final int _startTime;
   final int _stopTime;
+  final VoidCallback _updateOverview;
 
-  MyAddDialog(this._startTime, this._stopTime);
+  MyAddDialog(this._startTime, this._stopTime, this._updateOverview);
 
   @override
   _MyAddDialogState createState() =>
-      _MyAddDialogState(this._startTime, this._stopTime);
+      _MyAddDialogState(_startTime, _stopTime, _updateOverview);
 }
 
 class _MyAddDialogState extends State<MyAddDialog> {
   final int _startTime;
   final int _stopTime;
+  final VoidCallback _updateOverview;
 
-  _MyAddDialogState(this._startTime, this._stopTime);
+  _MyAddDialogState(this._startTime, this._stopTime, this._updateOverview);
 
   String _comment = "";
   bool _loading = false;
@@ -94,7 +99,7 @@ class _MyAddDialogState extends State<MyAddDialog> {
                               setState(() {
                                 _loading = true;
                               });
-                              await addWork({
+                              RAdd res = await addWork({
                                 "addedUsers": [],
                                 "comment": _comment,
                                 "workDate": convertDateBackend(
@@ -103,6 +108,8 @@ class _MyAddDialogState extends State<MyAddDialog> {
                                 "workFrom": formatTimeRounded(_startTime),
                                 "workTo": formatTimeRounded(_stopTime)
                               });
+                              Prefs().setOverview(res.overview);
+                              _updateOverview();
                               await deleteWorkTimer();
                               Navigator.pop(context, true);
                             },

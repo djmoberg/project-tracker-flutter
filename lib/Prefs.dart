@@ -16,6 +16,7 @@ class Prefs {
 
   RUser user;
   String theme = "dark";
+  List<dynamic> overview;
 
   Future init() async {
     user = await _getUser();
@@ -48,5 +49,11 @@ class Prefs {
       prefs.setString("theme", value);
     });
     theme = value;
+  }
+
+  //Non persistence
+
+  void setOverview(value) async {
+    overview = value;
   }
 }

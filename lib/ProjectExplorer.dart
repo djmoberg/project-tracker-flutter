@@ -36,8 +36,9 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
 
   _MyProjectExplorerState(this._project, this._onLogout);
 
-  Widget _route = User();
+  Widget _route;
   RUser _user = Prefs().user;
+  Project _liveProject;
 
   Widget _getAdminTile() {
     if (_isAdmin()) {
@@ -61,13 +62,26 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
       return false;
     } else {
       List<dynamic> isAdminFor = _user.user["isAdmin"];
-      return isAdminFor.contains(_project.id);
+      return isAdminFor.contains(_liveProject.id);
     }
+  }
+
+  void _updateOverview() {
+    Project newProject = Project(
+        id: _liveProject.id,
+        name: _liveProject.name,
+        description: _liveProject.description,
+        overview: Prefs().overview);
+    setState(() {
+      _liveProject = newProject;
+    });
   }
 
   @override
   void initState() {
     super.initState();
+    _liveProject = _project;
+    _route = User(() => _updateOverview());
   }
 
   @override
@@ -86,35 +100,37 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
                   BoxDecoration(color: Theme.of(context).secondaryHeaderColor),
             ),
             ListTile(
-              selected: _route.toString() == WorkTimer().toString(),
+              selected: _route.toString() ==
+                  WorkTimer(() => _updateOverview()).toString(),
               leading: Icon(Icons.timer),
               title: Text("Work Timer"),
               onTap: () {
                 setState(() {
-                  _route = WorkTimer();
+                  _route = WorkTimer(() => _updateOverview());
                 });
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              selected: _route.toString() == User().toString(),
+              selected:
+                  _route.toString() == User(() => _updateOverview()).toString(),
               leading: Icon(Icons.account_box),
               title:
                   _user == null ? Text("User") : Text(_user.user["username"]),
               onTap: () {
                 setState(() {
-                  _route = User();
+                  _route = User(() => _updateOverview());
                 });
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              selected: _route.toString() == Overview(_project).toString(),
+              selected: _route.toString() == Overview(_liveProject).toString(),
               leading: Icon(Icons.calendar_today),
               title: Text("Overview"),
               onTap: () {
                 setState(() {
-                  _route = Overview(_project);
+                  _route = Overview(_liveProject);
                 });
                 Navigator.pop(context);
               },
@@ -141,7 +157,7 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
         ),
       ),
       appBar: AppBar(
-        title: Text(_project.name + " - " + _project.description),
+        title: Text(_liveProject.name + " - " + _liveProject.description),
       ),
       body: _route,
     );

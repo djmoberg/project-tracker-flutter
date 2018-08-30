@@ -1,22 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:project_tracker_test/Prefs.dart';
+import 'package:project_tracker_test/ResponseObjects.dart';
 
 import 'package:project_tracker_test/utils.dart';
 import 'package:project_tracker_test/utils2.dart';
 
 class Add extends StatelessWidget {
+  final VoidCallback _updateOverview;
+
+  Add(this._updateOverview);
+
   @override
   Widget build(BuildContext context) {
-    return MyAdd();
+    return MyAdd(this._updateOverview);
   }
 }
 
 class MyAdd extends StatefulWidget {
+  final VoidCallback _updateOverview;
+
+  MyAdd(this._updateOverview);
+
   @override
-  _MyAddState createState() => _MyAddState();
+  _MyAddState createState() => _MyAddState(this._updateOverview);
 }
 
 class _MyAddState extends State<MyAdd> {
+  final VoidCallback _updateOverview;
+
+  _MyAddState(this._updateOverview);
+
   DateTime _date = DateTime.now();
   int fromH = DateTime.now().hour;
   int fromM = 0;
@@ -291,13 +305,15 @@ class _MyAddState extends State<MyAdd> {
                   setState(() {
                     _loading = true;
                   });
-                  await addWork({
+                  RAdd res = await addWork({
                     "addedUsers": [],
                     "comment": _comment,
                     "workDate": convertDateBackend(_date),
                     "workFrom": "${withZero(fromH)}:${withZero(fromM)}",
                     "workTo": "${withZero(toH)}:${withZero(toM)}"
                   });
+                  Prefs().setOverview(res.overview);
+                  _updateOverview();
                   setState(() {
                     _date = DateTime.now();
                     fromH = DateTime.now().hour;
