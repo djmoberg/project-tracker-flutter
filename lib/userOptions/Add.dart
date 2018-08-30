@@ -41,7 +41,15 @@ class _MyAddState extends State<MyAdd> {
   TextEditingController _controller;
 
   bool _validForm() {
-    return _comment != "";
+    return _comment != "" && _validTime();
+  }
+
+  bool _validTime() {
+    String workFrom = "${withZero(fromH)}:${withZero(fromM)}";
+    String workTo = "${withZero(toH)}:${withZero(toM)}";
+    String hours = getHours(workFrom, workTo);
+    bool validTime = double.parse(hours) > 0.0;
+    return validTime;
   }
 
   @override
@@ -178,6 +186,19 @@ class _MyAddState extends State<MyAdd> {
             ),
           ],
         ),
+        _validTime()
+            ? SizedBox()
+            : Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 16.0,
+                  ),
+                  Text(
+                    "Time from must be after time to",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ],
+              ),
         SizedBox(
           height: 16.0,
         ),
