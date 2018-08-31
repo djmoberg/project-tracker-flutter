@@ -204,3 +204,15 @@ Future<List<ProjectSearch>> findProjects(value) async {
   }
   return res;
 }
+
+Future<List<dynamic>> getUsers() async {
+  List<dynamic> users;
+  http.Response response = await http.get(backend + "/project/users",
+      headers: {"cookie": await Cookie.getCookie()});
+  if (response.statusCode == 200) {
+    users = json.decode(response.body);
+  } else {
+    throw Exception("Failed to load projects");
+  }
+  return users;
+}

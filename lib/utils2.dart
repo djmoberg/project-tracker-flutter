@@ -48,9 +48,11 @@ String formatTime(int time) {
 
 String formatTimeRounded(int time) {
   DateTime dt = DateTime.fromMillisecondsSinceEpoch(time);
-  String h = (dt.hour) < 10 ? "0${(dt.hour)}" : "${(dt.hour)}"; //??
+  int iH = dt.minute >= 53 ? dt.hour + 1 : dt.hour;
+  String h = iH < 10 ? "0$iH" : "$iH"; //??
+  String m = roundMinutes(dt.minute);
 
-  return "$h:${roundMinutes(dt.minute)}";
+  return "$h:$m";
 }
 
 String roundMinutes(m) {

@@ -21,23 +21,77 @@ class Overview extends StatelessWidget {
             ],
           ),
         ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            DropdownButton(
+              items: <DropdownMenuItem>[
+                DropdownMenuItem(
+                  child: Text("All"),
+                ),
+                DropdownMenuItem(
+                  child: Text("Daniel"),
+                ),
+                DropdownMenuItem(
+                  child: Text("Frank"),
+                ),
+              ],
+              onChanged: (value) {},
+            ),
+            DropdownButton(
+              items: <DropdownMenuItem>[
+                DropdownMenuItem(
+                  child: Text("All"),
+                ),
+                DropdownMenuItem(
+                  child: Text("January"),
+                ),
+                DropdownMenuItem(
+                  child: Text("February"),
+                ),
+              ],
+              onChanged: (value) {},
+            ),
+            DropdownButton(
+              items: <DropdownMenuItem>[
+                DropdownMenuItem(
+                  child: Text("All"),
+                ),
+                DropdownMenuItem(
+                  child: Text("2018"),
+                ),
+              ],
+              onChanged: (value) {},
+            ),
+          ],
+        ),
         Expanded(
           child: ListView.builder(
             itemCount: _project.overview.length,
             itemBuilder: (context, index) {
               var data = _project.overview[index];
+              String name = data["name"];
+              String workDate = data["workDate"];
+              String time = "${data["workFrom"]} - ${data["workTo"]}";
+              String hours = getHours(data["workFrom"], data["workTo"]);
+              String comment = data["comment"];
               return Card(
                 child: ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(data["name"]),
-                      Text(data["workDate"]),
-                      Text("${data["workFrom"]} - ${data["workTo"]}"),
-                      Text(getHours(data["workFrom"], data["workTo"])),
+                      Text(name),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(workDate),
+                          Text(time),
+                          Text(hours),
+                        ],
+                      ),
                     ],
                   ),
-                  subtitle: Text(data["comment"]),
+                  subtitle: Text(comment),
                 ),
               );
             },
