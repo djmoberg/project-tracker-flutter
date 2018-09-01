@@ -85,7 +85,7 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
   void initState() {
     super.initState();
     _liveProject = _project;
-    _route = User(() => _updateOverview());
+    _route = User(() => _updateOverview(), _liveProject);
   }
 
   @override
@@ -116,14 +116,14 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
               },
             ),
             ListTile(
-              selected:
-                  _route.toString() == User(() => _updateOverview()).toString(),
+              selected: _route.toString() ==
+                  User(() => _updateOverview(), _liveProject).toString(),
               leading: Icon(Icons.account_box),
               title:
                   _user == null ? Text("User") : Text(_user.user["username"]),
               onTap: () {
                 setState(() {
-                  _route = User(() => _updateOverview());
+                  _route = User(() => _updateOverview(), _liveProject);
                 });
                 Navigator.pop(context);
               },
@@ -140,6 +140,11 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
               },
             ),
             _getAdminTile(),
+            ListTile(
+              leading: Icon(Icons.restore_from_trash),
+              title: Text("Trash"),
+              onTap: () {},
+            ),
             ListTile(
               leading: Icon(Icons.arrow_back),
               title: Text("Change Project"),
