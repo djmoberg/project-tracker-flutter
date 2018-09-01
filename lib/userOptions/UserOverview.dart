@@ -191,7 +191,7 @@ class _MyUserOverviewState extends State<MyUserOverview> {
             itemCount: _filteredList(_overview).length,
             itemBuilder: (context, index) {
               var data = _filteredList(_overview)[index];
-              String name = data["name"];
+              // String name = data["name"];
               String workDate = data["workDate"];
               String time = "${data["workFrom"]} - ${data["workTo"]}";
               String hours = getHours(data["workFrom"], data["workTo"]);
@@ -201,7 +201,7 @@ class _MyUserOverviewState extends State<MyUserOverview> {
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(name),
+                      // Text(name),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[

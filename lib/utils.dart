@@ -7,8 +7,8 @@ import 'package:project_tracker_test/Prefs.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-const backend = "https://project-tracker-backend.herokuapp.com";
-const backend2 = "http://192.168.38.110:3000";
+const backend2 = "https://project-tracker-backend.herokuapp.com";
+const backend = "http://192.168.38.110:3000";
 
 class Cookie {
   static Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -228,5 +228,31 @@ Future newPassword(Map<String, dynamic> data) async {
     print(response.body);
   } else {
     throw Exception("Failed to update password");
+  }
+}
+
+Future<List<DeletedWork>> getDeletedWork() async {
+  List<DeletedWork> work = List();
+  http.Response response = await http.get(backend + "/work/deleted",
+      headers: {"cookie": await Cookie.getCookie()});
+  if (response.statusCode == 200) {
+    List<dynamic> body = json.decode(response.body);
+    body.forEach((item) {
+      work.add(DeletedWork.fromJson(item));
+    });
+  } else {
+    throw Exception("Failed to load deleted work");
+  }
+  return work;
+}
+
+Future deleteTrash(int id) async {
+  http.Response response = await http.delete(
+      backend + "/work/flutterTrash/" + id.toString(),
+      headers: {"cookie": await Cookie.getCookie()});
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to delete trash");
   }
 }

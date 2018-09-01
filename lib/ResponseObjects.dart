@@ -71,3 +71,33 @@ class RAdd {
     return RAdd(status: json["status"], overview: json["overview"]);
   }
 }
+
+class DeletedWork {
+  int id;
+  int user;
+  int project;
+  String workDate;
+  String workFrom;
+  String workTo;
+  String comment;
+
+  DeletedWork(
+      {this.id,
+      this.user,
+      this.project,
+      this.workDate,
+      this.workFrom,
+      this.workTo,
+      this.comment});
+
+  factory DeletedWork.fromJson(Map<String, dynamic> json) {
+    return DeletedWork(
+        id: json["id"],
+        user: json["user"],
+        project: json["project"],
+        workDate: json["workDate"],
+        workFrom: json["workFrom"],
+        workTo: json["workTo"],
+        comment: json["comment"]);
+  }
+}

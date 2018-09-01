@@ -7,6 +7,7 @@ import 'package:project_tracker_test/Settings.dart';
 import 'package:project_tracker_test/User.dart';
 import 'package:project_tracker_test/WorkTimer.dart';
 import 'package:project_tracker_test/Prefs.dart';
+import 'package:project_tracker_test/Trash.dart';
 
 class ProjectExplorer extends StatelessWidget {
   final Project _project;
@@ -141,9 +142,16 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
             ),
             _getAdminTile(),
             ListTile(
+              selected: _route.toString() ==
+                  Trash(() => _updateOverview()).toString(),
               leading: Icon(Icons.restore_from_trash),
               title: Text("Trash"),
-              onTap: () {},
+              onTap: () {
+                setState(() {
+                  _route = Trash(() => _updateOverview());
+                });
+                Navigator.pop(context);
+              },
             ),
             ListTile(
               leading: Icon(Icons.arrow_back),

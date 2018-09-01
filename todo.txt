@@ -1,0 +1,2 @@
+|   lagre påloggingsinfo
+|   prøv å logge inn automatisk ved statuskode != 200
