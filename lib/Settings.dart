@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:project_tracker_test/Prefs.dart';
 
+import 'package:project_tracker_test/ChangePassword.dart';
+
 class Settings extends StatelessWidget {
   final VoidCallback _onLogout;
   final VoidCallback _update;
@@ -29,6 +31,20 @@ class Settings extends StatelessWidget {
             },
             value: Prefs().theme == "dark",
           ),
+        ),
+        ListTile(
+          leading: Icon(Icons.lock_open),
+          title: Text("Change Password"),
+          onTap: () async {
+            bool res = await Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ChangePassword()));
+            if (res != null && res) {
+              Navigator.pop(context);
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text("Password Changed"),
+              ));
+            }
+          },
         ),
         ListTile(
           leading: Icon(Icons.exit_to_app),

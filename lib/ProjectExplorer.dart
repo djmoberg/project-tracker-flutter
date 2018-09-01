@@ -157,7 +157,19 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
         ),
       ),
       appBar: AppBar(
-        title: Text(_liveProject.name + " - " + _liveProject.description),
+        title: GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => SimpleDialog(
+                      title: Center(child: Text(_liveProject.name)),
+                      children: <Widget>[
+                        Center(child: Text(_liveProject.description))
+                      ],
+                    ),
+              );
+            },
+            child: Text(_liveProject.name + " - " + _liveProject.description)),
       ),
       body: _route,
     );

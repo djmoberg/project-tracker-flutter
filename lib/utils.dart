@@ -216,3 +216,17 @@ Future<List<dynamic>> getUsers() async {
   }
   return users;
 }
+
+Future newPassword(Map<String, dynamic> data) async {
+  http.Response response = await http.put(backend + "/user/newPassword",
+      headers: {
+        "cookie": await Cookie.getCookie(),
+        "Content-Type": "application/json"
+      },
+      body: json.encode(data));
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to update password");
+  }
+}
