@@ -10,6 +10,158 @@ class Overview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return MyOverview(_project);
+  }
+}
+
+class MyOverview extends StatefulWidget {
+  final Project _project;
+
+  MyOverview(this._project);
+
+  @override
+  _MyOverviewState createState() => _MyOverviewState(_project);
+}
+
+class _MyOverviewState extends State<MyOverview> {
+  final Project _project;
+
+  _MyOverviewState(this._project);
+
+  List<dynamic> _overview;
+  String _selectedUser = "All";
+  String _selectedMonth = "All";
+  String _selectedYear = "All";
+
+  List<DropdownMenuItem> _userList() {
+    List<Map<String, String>> list = uniqueUserList(_overview);
+    List<DropdownMenuItem> res = List();
+
+    res.add(DropdownMenuItem(
+      child: Text("All"),
+      value: "All",
+    ));
+
+    list.forEach((field) {
+      res.add(DropdownMenuItem(
+        child: Text(field["text"]),
+        value: field["value"],
+      ));
+    });
+
+    return res;
+  }
+
+  List<DropdownMenuItem> _monthList() {
+    List<DropdownMenuItem> res = List();
+
+    res.add(DropdownMenuItem(
+      child: Text("All"),
+      value: "All",
+    ));
+    res.add(DropdownMenuItem(
+      child: Text("January"),
+      value: "01",
+    ));
+    res.add(DropdownMenuItem(
+      child: Text("February"),
+      value: "02",
+    ));
+    res.add(DropdownMenuItem(
+      child: Text("March"),
+      value: "03",
+    ));
+    res.add(DropdownMenuItem(
+      child: Text("April"),
+      value: "04",
+    ));
+    res.add(DropdownMenuItem(
+      child: Text("May"),
+      value: "05",
+    ));
+    res.add(DropdownMenuItem(
+      child: Text("June"),
+      value: "06",
+    ));
+    res.add(DropdownMenuItem(
+      child: Text("July"),
+      value: "07",
+    ));
+    res.add(DropdownMenuItem(
+      child: Text("August"),
+      value: "08",
+    ));
+    res.add(DropdownMenuItem(
+      child: Text("September"),
+      value: "09",
+    ));
+    res.add(DropdownMenuItem(
+      child: Text("October"),
+      value: "10",
+    ));
+    res.add(DropdownMenuItem(
+      child: Text("November"),
+      value: "11",
+    ));
+    res.add(DropdownMenuItem(
+      child: Text("December"),
+      value: "12",
+    ));
+
+    return res;
+  }
+
+  List<DropdownMenuItem> _yearList() {
+    List<Map<String, String>> list = uniqueYearList(_overview);
+    List<DropdownMenuItem> res = List();
+
+    res.add(DropdownMenuItem(
+      child: Text("All"),
+      value: "All",
+    ));
+
+    list.forEach((field) {
+      res.add(DropdownMenuItem(
+        child: Text(field["text"]),
+        value: field["value"],
+      ));
+    });
+
+    return res;
+  }
+
+  bool _isCurrentlySelected(overview) {
+    return ((_selectedUser == overview["name"] || _selectedUser == "All") &&
+        (_selectedMonth == overview["workDate"].split("-")[1] ||
+            _selectedMonth == "All") &&
+        (_selectedYear == overview["workDate"].split("-")[0] ||
+            _selectedYear == "All"));
+  }
+
+  List<dynamic> _sortList(List<dynamic> overview) {
+    overview.sort((a, b) {
+      if (a["workDate"] == b["workDate"]) {
+        return b["workFrom"].compareTo(a["workFrom"]);
+      } else {
+        return 0;
+      }
+    });
+    return overview;
+  }
+
+  List<dynamic> _filteredList(List<dynamic> overview) {
+    return _sortList(
+        overview.where((row) => _isCurrentlySelected(row)).toList());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _overview = _project.overview;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Padding(
@@ -17,7 +169,7 @@ class Overview extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text("Hours total: " + getTotalHours(_project.overview)),
+              Text("Hours total: " + getTotalHours(_filteredList(_overview))),
             ],
           ),
         ),
@@ -25,51 +177,39 @@ class Overview extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             DropdownButton(
-              items: <DropdownMenuItem>[
-                DropdownMenuItem(
-                  child: Text("All"),
-                ),
-                DropdownMenuItem(
-                  child: Text("Daniel"),
-                ),
-                DropdownMenuItem(
-                  child: Text("Frank"),
-                ),
-              ],
-              onChanged: (value) {},
+              value: _selectedUser,
+              items: _userList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedUser = value;
+                });
+              },
             ),
             DropdownButton(
-              items: <DropdownMenuItem>[
-                DropdownMenuItem(
-                  child: Text("All"),
-                ),
-                DropdownMenuItem(
-                  child: Text("January"),
-                ),
-                DropdownMenuItem(
-                  child: Text("February"),
-                ),
-              ],
-              onChanged: (value) {},
+              value: _selectedMonth,
+              items: _monthList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedMonth = value;
+                });
+              },
             ),
             DropdownButton(
-              items: <DropdownMenuItem>[
-                DropdownMenuItem(
-                  child: Text("All"),
-                ),
-                DropdownMenuItem(
-                  child: Text("2018"),
-                ),
-              ],
-              onChanged: (value) {},
+              value: _selectedYear,
+              items: _yearList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedYear = value;
+                });
+              },
             ),
           ],
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: _project.overview.length,
+            itemCount: _filteredList(_overview).length,
             itemBuilder: (context, index) {
-              var data = _project.overview[index];
+              var data = _filteredList(_overview)[index];
               String name = data["name"];
               String workDate = data["workDate"];
               String time = "${data["workFrom"]} - ${data["workTo"]}";

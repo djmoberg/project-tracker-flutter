@@ -67,3 +67,32 @@ String roundMinutes(m) {
   else
     return "00";
 }
+
+List<Map<String, String>> uniqueUserList(List<dynamic> overview) {
+  List<String> users = List();
+  List<Map<String, String>> list = List();
+
+  overview.forEach((row) {
+    if (!users.contains(row["name"])) {
+      users.add(row["name"]);
+      list.add({"text": row["name"], "value": row["name"]});
+    }
+  });
+
+  return list;
+}
+
+List<Map<String, String>> uniqueYearList(List<dynamic> overview) {
+  List<String> years = List();
+  List<Map<String, String>> list = List();
+
+  overview.forEach((row) {
+    String year = row["workDate"].split("-")[0];
+    if (!years.contains(year)) {
+      years.add(year);
+      list.add({"text": year, "value": year});
+    }
+  });
+
+  return list;
+}
