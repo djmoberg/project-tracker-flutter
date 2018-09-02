@@ -225,6 +225,16 @@ class _MyUserOverviewState extends State<MyUserOverview> {
                 key: Key(id.toString()),
                 background: Container(
                   color: Colors.red,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(Icons.delete),
+                        Icon(Icons.delete)
+                      ],
+                    ),
+                  ),
                 ),
                 onDismissed: (direction) async {
                   bool moved = await moveToTrash(data);

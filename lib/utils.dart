@@ -285,3 +285,42 @@ Future deleteWork(int id) async {
   }
   return res;
 }
+
+Future<List<dynamic>> getPendingJoinRequests() async {
+  List<dynamic> projects;
+  http.Response response = await http.get(backend + "/user/pendingJoinRequests",
+      headers: {"cookie": await Cookie.getCookie()});
+  if (response.statusCode == 200) {
+    projects = json.decode(response.body);
+    // print(projects.projects);
+  } else {
+    throw Exception("Failed to load pending join requests");
+  }
+  return projects;
+}
+
+Future sendJoinRequest(Map<String, dynamic> data) async {
+  http.Response response = await http.post(backend + "/projects/joinRequest",
+      headers: {
+        "cookie": await Cookie.getCookie(),
+        "Content-Type": "application/json"
+      },
+      body: json.encode(data));
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to send join request");
+  }
+}
+
+Future deleteJoinRequest(String id) async {
+  http.Response response = await http.delete(
+    backend + "/user/flutterPendingJoinRequest/" + id,
+    headers: {"cookie": await Cookie.getCookie()},
+  );
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to delete join request");
+  }
+}
