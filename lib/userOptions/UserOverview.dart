@@ -1,33 +1,38 @@
 import 'package:flutter/material.dart';
 
 import 'package:project_tracker_test/ResponseObjects.dart';
+import 'package:project_tracker_test/utils.dart';
 import 'package:project_tracker_test/utils2.dart';
 import 'package:project_tracker_test/Prefs.dart';
 
 class UserOverview extends StatelessWidget {
   final Project _project;
+  final VoidCallback _updateOverview;
 
-  UserOverview(this._project);
+  UserOverview(this._project, this._updateOverview);
 
   @override
   Widget build(BuildContext context) {
-    return MyUserOverview(_project);
+    return MyUserOverview(_project, _updateOverview);
   }
 }
 
 class MyUserOverview extends StatefulWidget {
   final Project _project;
+  final VoidCallback _updateOverview;
 
-  MyUserOverview(this._project);
+  MyUserOverview(this._project, this._updateOverview);
 
   @override
-  _MyUserOverviewState createState() => _MyUserOverviewState(_project);
+  _MyUserOverviewState createState() =>
+      _MyUserOverviewState(_project, _updateOverview);
 }
 
 class _MyUserOverviewState extends State<MyUserOverview> {
   final Project _project;
+  final VoidCallback _updateOverview;
 
-  _MyUserOverviewState(this._project);
+  _MyUserOverviewState(this._project, this._updateOverview);
 
   List<dynamic> _overview;
   String _selectedUser;
@@ -192,28 +197,50 @@ class _MyUserOverviewState extends State<MyUserOverview> {
             itemBuilder: (context, index) {
               var data = _filteredList(_overview)[index];
               // String name = data["name"];
+              int id = data["id"];
               String workDate = data["workDate"];
               String time = "${data["workFrom"]} - ${data["workTo"]}";
               String hours = getHours(data["workFrom"], data["workTo"]);
               String comment = data["comment"];
-              return Card(
-                child: ListTile(
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // Text(name),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(workDate),
-                          Text(time),
-                          Text(hours),
-                        ],
-                      ),
-                    ],
+              return Dismissible(
+                child: Card(
+                  child: ListTile(
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        // Text(name),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(workDate),
+                            Text(time),
+                            Text(hours),
+                          ],
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(comment),
                   ),
-                  subtitle: Text(comment),
                 ),
+                key: Key(id.toString()),
+                background: Container(
+                  color: Colors.red,
+                ),
+                onDismissed: (direction) async {
+                  bool moved = await moveToTrash(data);
+                  if (moved) {
+                    RAdd res = await deleteWork(id);
+                    Prefs().setOverview(res.overview);
+                    _updateOverview();
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text("Work moved to trash"),
+                      duration: Duration(seconds: 1),
+                    ));
+                  } else {
+                    Scaffold.of(context).showSnackBar(
+                        SnackBar(content: Text("Something went wrong")));
+                  }
+                },
               );
             },
           ),

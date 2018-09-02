@@ -132,7 +132,7 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
             ListTile(
               selected: _route.toString() == Overview(_liveProject).toString(),
               leading: Icon(Icons.calendar_today),
-              title: Text("Overview"),
+              title: Text("Complete Overview"),
               onTap: () {
                 setState(() {
                   _route = Overview(_liveProject);

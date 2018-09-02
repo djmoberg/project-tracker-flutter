@@ -35,7 +35,7 @@ class _MyUserState extends State<MyUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: UserOverview(_project),
+      body: UserOverview(_project, _updateOverview),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {

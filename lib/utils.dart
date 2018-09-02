@@ -256,3 +256,32 @@ Future deleteTrash(int id) async {
     throw Exception("Failed to delete trash");
   }
 }
+
+Future<bool> moveToTrash(Map<String, dynamic> data) async {
+  bool moved = false;
+  http.Response response = await http.post(backend + "/work/trash",
+      headers: {
+        "cookie": await Cookie.getCookie(),
+        "Content-Type": "application/json"
+      },
+      body: json.encode(data));
+  if (response.statusCode == 200) {
+    moved = response.body == "Work moved";
+  } else {
+    throw Exception("Failed to move to trash");
+  }
+  return moved;
+}
+
+Future deleteWork(int id) async {
+  RAdd res;
+  http.Response response = await http.delete(
+      backend + "/work/flutterDelete/" + id.toString(),
+      headers: {"cookie": await Cookie.getCookie()});
+  if (response.statusCode == 200) {
+    res = RAdd.fromJson(json.decode(response.body));
+  } else {
+    throw Exception("Failed to delete work");
+  }
+  return res;
+}
