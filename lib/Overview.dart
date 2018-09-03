@@ -139,13 +139,13 @@ class _MyOverviewState extends State<MyOverview> {
   }
 
   List<dynamic> _sortList(List<dynamic> overview) {
-    overview.sort((a, b) {
-      if (a["workDate"] == b["workDate"]) {
-        return b["workFrom"].compareTo(a["workFrom"]);
-      } else {
-        return 0;
-      }
-    });
+    // overview.sort((a, b) {
+    //   if (a["workDate"] == b["workDate"]) {
+    //     return b["workFrom"].compareTo(a["workFrom"]);
+    //   } else {
+    //     return 0;
+    //   }
+    // });
     return overview;
   }
 

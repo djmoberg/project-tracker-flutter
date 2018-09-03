@@ -126,13 +126,13 @@ class _MyUserOverviewState extends State<MyUserOverview> {
   }
 
   List<dynamic> _sortList(List<dynamic> overview) {
-    overview.sort((a, b) {
-      if (a["workDate"] == b["workDate"]) {
-        return b["workFrom"].compareTo(a["workFrom"]);
-      } else {
-        return 0;
-      }
-    });
+    // overview.sort((a, b) {
+    //   if (a["workDate"] == b["workDate"]) {
+    //     return b["workFrom"].compareTo(a["workFrom"]);
+    //   } else {
+    //     return 0;
+    //   }
+    // });
     return overview;
   }
 
@@ -220,6 +220,12 @@ class _MyUserOverviewState extends State<MyUserOverview> {
                       ],
                     ),
                     subtitle: Text(comment),
+                    onTap: () {
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text("TODO: edit"),
+                        duration: Duration(seconds: 1),
+                      ));
+                    },
                   ),
                 ),
                 key: Key(id.toString()),
