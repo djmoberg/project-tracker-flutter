@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:project_tracker_test/utils.dart';
 import 'package:project_tracker_test/ResponseObjects.dart';
 import 'package:project_tracker_test/ProjectExplorer.dart';
+import 'package:project_tracker_test/Prefs.dart';
 
 class ChooseProject extends StatelessWidget {
   final List<Map<String, dynamic>> _projects;
@@ -40,17 +41,28 @@ class _MyChooseProjectState extends State<MyChooseProject> {
 
   bool loading = false;
 
-  Future _openProjectExplorer(index) async {
+  Future _openProjectExplorer(id) async {
     setState(() {
       loading = true;
     });
-    Project project = await getProject(_projects[index]["id"]);
+    Project project = await getProject(id);
+    await Prefs().setSelectedProject(id);
     setState(() {
       loading = false;
     });
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+    await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return ProjectExplorer(project, _onLogout, _update);
     }));
+    Prefs().setSelectedProject(null);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    int selectedProject = Prefs().selectedProject;
+    if (selectedProject != null) {
+      _openProjectExplorer(selectedProject);
+    }
   }
 
   @override
@@ -63,7 +75,7 @@ class _MyChooseProjectState extends State<MyChooseProject> {
             itemBuilder: (context, index) {
               return ListTile(
                   title: Center(child: Text(_projects[index]["name"])),
-                  onTap: () => _openProjectExplorer(index));
+                  onTap: () => _openProjectExplorer(_projects[index]["id"]));
             },
           );
   }

@@ -82,6 +82,23 @@ List<Map<String, String>> uniqueUserList(List<dynamic> overview) {
   return list;
 }
 
+List<Map<String, String>> monthList() {
+  List<Map<String, String>> list = List();
+  list.add({"text": "January", "value": "01"});
+  list.add({"text": "February", "value": "02"});
+  list.add({"text": "March", "value": "03"});
+  list.add({"text": "April", "value": "04"});
+  list.add({"text": "May", "value": "05"});
+  list.add({"text": "June", "value": "06"});
+  list.add({"text": "July", "value": "07"});
+  list.add({"text": "August", "value": "08"});
+  list.add({"text": "September", "value": "09"});
+  list.add({"text": "October", "value": "10"});
+  list.add({"text": "November", "value": "11"});
+  list.add({"text": "December", "value": ""});
+  return list;
+}
+
 List<Map<String, String>> uniqueYearList(List<dynamic> overview) {
   List<String> years = List();
   List<Map<String, String>> list = List();

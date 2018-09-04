@@ -53,60 +53,20 @@ class _MyOverviewState extends State<MyOverview> {
   }
 
   List<DropdownMenuItem> _monthList() {
+    List<Map<String, String>> list = monthList();
     List<DropdownMenuItem> res = List();
 
     res.add(DropdownMenuItem(
       child: Text("All"),
       value: "All",
     ));
-    res.add(DropdownMenuItem(
-      child: Text("January"),
-      value: "01",
-    ));
-    res.add(DropdownMenuItem(
-      child: Text("February"),
-      value: "02",
-    ));
-    res.add(DropdownMenuItem(
-      child: Text("March"),
-      value: "03",
-    ));
-    res.add(DropdownMenuItem(
-      child: Text("April"),
-      value: "04",
-    ));
-    res.add(DropdownMenuItem(
-      child: Text("May"),
-      value: "05",
-    ));
-    res.add(DropdownMenuItem(
-      child: Text("June"),
-      value: "06",
-    ));
-    res.add(DropdownMenuItem(
-      child: Text("July"),
-      value: "07",
-    ));
-    res.add(DropdownMenuItem(
-      child: Text("August"),
-      value: "08",
-    ));
-    res.add(DropdownMenuItem(
-      child: Text("September"),
-      value: "09",
-    ));
-    res.add(DropdownMenuItem(
-      child: Text("October"),
-      value: "10",
-    ));
-    res.add(DropdownMenuItem(
-      child: Text("November"),
-      value: "11",
-    ));
-    res.add(DropdownMenuItem(
-      child: Text("December"),
-      value: "12",
-    ));
+
+    list.forEach((field) {
+      res.add(DropdownMenuItem(
+        child: Text(field["text"]),
+        value: field["value"],
+      ));
+    });
 
     return res;
   }
