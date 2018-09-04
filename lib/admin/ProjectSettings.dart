@@ -1,26 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:project_tracker_test/Prefs.dart';
+import 'package:project_tracker_test/ResponseObjects.dart';
+
+import 'package:project_tracker_test/utils.dart';
 
 class ProjectSettings extends StatelessWidget {
+  final Project _project;
+  final VoidCallback _updateProject;
+
+  ProjectSettings(this._project, this._updateProject);
+
   @override
   Widget build(BuildContext context) {
-    return MyProjectSettings();
+    return MyProjectSettings(_project, _updateProject);
   }
 }
 
 class MyProjectSettings extends StatefulWidget {
+  final Project _project;
+  final VoidCallback _updateProject;
+
+  MyProjectSettings(this._project, this._updateProject);
+
   @override
-  _MyProjectSettingsState createState() => _MyProjectSettingsState();
+  _MyProjectSettingsState createState() =>
+      _MyProjectSettingsState(_project, _updateProject);
 }
 
 class _MyProjectSettingsState extends State<MyProjectSettings> {
-  String _name = "";
-  String _description = "";
+  final Project _project;
+  final VoidCallback _updateProject;
+
+  _MyProjectSettingsState(this._project, this._updateProject);
+
+  String _name;
+  String _description;
   bool _loading = false;
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _nameController;
+  TextEditingController _descriptionController;
+  Project _liveProject;
 
   bool _validForm() {
-    return _name != "";
+    return _name != "" &&
+        (_name != _liveProject.name ||
+            _description != _liveProject.description);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _name = _project.name;
+    _description = _project.description;
+    _nameController = TextEditingController(text: _project.name);
+    _descriptionController = TextEditingController(text: _project.description);
+    _liveProject = _project;
   }
 
   @override
@@ -64,18 +97,21 @@ class _MyProjectSettingsState extends State<MyProjectSettings> {
                         setState(() {
                           _loading = true;
                         });
-                        // await registerProject(
-                        //     {"description": _description, "name": _name});
+                        await updateProject(
+                            {"newDescription": _description, "newName": _name});
+                        Prefs().setProjectName(_name);
+                        Prefs().setProjectDescription(_description);
+                        _updateProject();
                         setState(() {
                           _loading = false;
-                          _name = "";
-                          _description = "";
+                          _liveProject = Project(
+                              id: _liveProject.id,
+                              name: _name,
+                              description: _description,
+                              overview: _liveProject.overview);
                         });
-                        _nameController.clear();
-                        _descriptionController.clear();
-                        // _updateProjects();
                         Scaffold.of(context).showSnackBar(
-                            SnackBar(content: Text("Project Registered")));
+                            SnackBar(content: Text("Project Updated")));
                       },
               ),
             ],

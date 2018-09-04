@@ -7,8 +7,8 @@ import 'package:project_tracker_test/Prefs.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-const backend = "https://project-tracker-backend.herokuapp.com";
-const backend2 = "http://192.168.38.110:3000";
+const backend2 = "https://project-tracker-backend.herokuapp.com";
+const backend = "http://192.168.38.110:3000";
 
 class Cookie {
   static Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -322,5 +322,68 @@ Future deleteJoinRequest(String id) async {
     print(response.body);
   } else {
     throw Exception("Failed to delete join request");
+  }
+}
+
+Future<List<dynamic>> getJoinRequests() async {
+  List<dynamic> requests;
+  http.Response response = await http.get(backend + "/project/joinRequests",
+      headers: {"cookie": await Cookie.getCookie()});
+  if (response.statusCode == 200) {
+    requests = json.decode(response.body);
+    // print(projects.projects);
+  } else {
+    throw Exception("Failed to load join requests");
+  }
+  return requests;
+}
+
+Future removeUser(String username) async {
+  http.Response response = await http.delete(
+      backend + "/project/flutterRemoveUser/" + username,
+      headers: {"cookie": await Cookie.getCookie()});
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to remove user");
+  }
+}
+
+Future makeAdmin(Map<String, dynamic> data) async {
+  http.Response response = await http.post(backend + "/project/makeAdmin",
+      headers: {
+        "cookie": await Cookie.getCookie(),
+        "Content-Type": "application/json"
+      },
+      body: json.encode(data));
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to make admin");
+  }
+}
+
+Future deleteProjectJoinRequest(int userId) async {
+  http.Response response = await http.delete(
+      backend + "/project/flutterJoinRequests/" + userId.toString(),
+      headers: {"cookie": await Cookie.getCookie()});
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to delete project join request");
+  }
+}
+
+Future updateProject(Map<String, dynamic> data) async {
+  http.Response response = await http.put(backend + "/project",
+      headers: {
+        "cookie": await Cookie.getCookie(),
+        "Content-Type": "application/json"
+      },
+      body: json.encode(data));
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to update project");
   }
 }

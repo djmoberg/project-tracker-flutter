@@ -19,6 +19,8 @@ class Prefs {
   int selectedProject;
   String defaultView = "User";
   List<dynamic> overview;
+  String projectName;
+  String projectDescription;
 
   Future init() async {
     user = await _getUser();
@@ -85,7 +87,15 @@ class Prefs {
 
   //Non persistence
 
-  void setOverview(value) async {
+  void setOverview(value) {
     overview = value;
+  }
+
+  void setProjectName(value) {
+    projectName = value;
+  }
+
+  void setProjectDescription(value) {
+    projectDescription = value;
   }
 }

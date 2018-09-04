@@ -48,12 +48,13 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
   Widget _getAdminTile() {
     if (_isAdmin()) {
       return ListTile(
-        selected: _route.toString() == Admin().toString(),
+        selected: _route.toString() ==
+            Admin(_liveProject, () => _updateProject()).toString(),
         leading: Icon(Icons.person_outline),
         title: Text("Admin"),
         onTap: () {
           setState(() {
-            _route = Admin();
+            _route = Admin(_liveProject, () => _updateProject());
           });
           Navigator.pop(context);
         },
@@ -82,6 +83,17 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
     });
   }
 
+  void _updateProject() {
+    Project newProject = Project(
+        id: _liveProject.id,
+        name: Prefs().projectName,
+        description: Prefs().projectDescription,
+        overview: _liveProject.overview);
+    setState(() {
+      _liveProject = newProject;
+    });
+  }
+
   Widget _getDefaultView() {
     String defaultView = Prefs().defaultView;
     switch (defaultView) {
@@ -92,7 +104,7 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
       case "Overview":
         return Overview(_liveProject);
       case "Admin":
-        return Admin();
+        return Admin(_liveProject, () => _updateProject());
       case "Trash":
         return Trash(() => _updateOverview());
       default:

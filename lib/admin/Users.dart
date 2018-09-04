@@ -33,38 +33,58 @@ class _MyUsersState extends State<MyUsers> {
     });
   }
 
+  _makeAdmin(username) async {
+    setState(() {
+      _loading = true;
+    });
+    await makeAdmin({"username": username});
+    await _getUsers();
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text(username + " is now an admin of the project"),
+    ));
+  }
+
+  _removeUser(username) async {
+    setState(() {
+      _loading = true;
+    });
+    await removeUser(username);
+    await _getUsers();
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text(username + " was removed from the project"),
+    ));
+  }
+
   List<Widget> _userWidgets() {
     List<Widget> widgets = List();
 
     _users.forEach((user) {
-      widgets.add(ListTile(
+      widgets.add(
+        ListTile(
           title: Row(
-        children: <Widget>[
-          Expanded(child: Text(user["name"])),
-          DropdownButton(
-            items: <DropdownMenuItem>[
-              DropdownMenuItem(
-                child: Text("Options"),
-              ),
-              DropdownMenuItem(
-                child: Text("Make admin"),
-              ),
-              DropdownMenuItem(
-                child: Text("Remove"),
-              ),
+            children: <Widget>[
+              Expanded(child: Text(user["name"])),
             ],
-            onChanged: (value) {},
           ),
-          // RaisedButton(
-          //   child: Text("Make admin"),
-          //   onPressed: () {},
-          // ),
-          // RaisedButton(
-          //   child: Text("Remove"),
-          //   onPressed: () {},
-          // ),
-        ],
-      )));
+          trailing: IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () async {
+              String res = await showDialog(
+                  context: context,
+                  builder: (context) => UserOptionDialog(user));
+              switch (res) {
+                case "admin":
+                  _makeAdmin(user["name"]);
+                  break;
+                case "remove":
+                  _removeUser(user["name"]);
+                  break;
+                default:
+              }
+            },
+          ),
+        ),
+      );
     });
 
     return widgets;
@@ -85,5 +105,36 @@ class _MyUsersState extends State<MyUsers> {
             : Column(
                 children: _userWidgets(),
               );
+  }
+}
+
+class UserOptionDialog extends StatelessWidget {
+  final Map<String, dynamic> _user;
+
+  UserOptionDialog(this._user);
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      title: Text("Options: " + _user["name"]),
+      children: <Widget>[
+        !_user["isAdmin"]
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: FlatButton(
+                    child: Text("Make Admin"),
+                    color: Theme.of(context).buttonColor,
+                    onPressed: () => Navigator.pop(context, "admin")),
+              )
+            : SizedBox(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: FlatButton(
+              child: Text("Remove"),
+              color: Colors.red,
+              onPressed: () => Navigator.pop(context, "remove")),
+        ),
+      ],
+    );
   }
 }

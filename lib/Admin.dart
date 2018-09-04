@@ -5,8 +5,14 @@ import 'package:project_tracker_test/admin/AddUser.dart';
 import 'package:project_tracker_test/admin/JoinRequests.dart';
 import 'package:project_tracker_test/admin/ProjectSettings.dart';
 import 'package:project_tracker_test/admin/ProjectDelete.dart';
+import 'package:project_tracker_test/ResponseObjects.dart';
 
 class Admin extends StatelessWidget {
+  final Project _project;
+  final VoidCallback _updateProject;
+
+  Admin(this._project, this._updateProject);
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -34,7 +40,7 @@ class Admin extends StatelessWidget {
           "Project Settings",
           style: Theme.of(context).textTheme.subhead,
         ),
-        ProjectSettings(),
+        ProjectSettings(_project, _updateProject),
         Divider(),
         Text(
           "Delete Project",
