@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_tracker_test/Prefs.dart';
 
 import 'package:project_tracker_test/ChangePassword.dart';
+import 'package:project_tracker_test/DefaultView.dart';
 
 class Settings extends StatelessWidget {
   final VoidCallback _onLogout;
@@ -31,6 +32,19 @@ class Settings extends StatelessWidget {
             },
             value: Prefs().theme == "dark",
           ),
+        ),
+        ListTile(
+          leading: Icon(Icons.view_module),
+          title: Text("Default View"),
+          trailing: Text(
+            Prefs().defaultView,
+            style: Theme.of(context).textTheme.body1,
+          ),
+          onTap: () async {
+            await showDialog(
+                context: context, builder: (context) => DefaultView());
+            Navigator.pop(context);
+          },
         ),
         ListTile(
           leading: Icon(Icons.lock_open),

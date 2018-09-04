@@ -82,11 +82,29 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
     });
   }
 
+  Widget _getDefaultView() {
+    String defaultView = Prefs().defaultView;
+    switch (defaultView) {
+      case "Work Timer":
+        return WorkTimer(() => _updateOverview());
+      case "User":
+        return User(() => _updateOverview(), _liveProject);
+      case "Overview":
+        return Overview(_liveProject);
+      case "Admin":
+        return Admin();
+      case "Trash":
+        return Trash(() => _updateOverview());
+      default:
+        return User(() => _updateOverview(), _liveProject);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _liveProject = _project;
-    _route = User(() => _updateOverview(), _liveProject);
+    _route = _getDefaultView();
   }
 
   @override

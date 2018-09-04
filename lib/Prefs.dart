@@ -17,12 +17,14 @@ class Prefs {
   RUser user;
   String theme = "dark";
   int selectedProject;
+  String defaultView = "User";
   List<dynamic> overview;
 
   Future init() async {
     user = await _getUser();
     theme = await _getTheme();
     selectedProject = await _getSelectedProject();
+    defaultView = await _getDefaultView();
   }
 
   static Future<RUser> _getUser() async {
@@ -65,6 +67,20 @@ class Prefs {
       prefs.setInt("selectedProject", value);
     });
     selectedProject = value;
+  }
+
+  static Future<String> _getDefaultView() async {
+    String defaultView = await _prefs.then((prefs) {
+      return (prefs.getString("defaultView") ?? "User");
+    });
+    return defaultView;
+  }
+
+  Future setDefaultView(value) async {
+    await _prefs.then((prefs) {
+      prefs.setString("defaultView", value);
+    });
+    defaultView = value;
   }
 
   //Non persistence
