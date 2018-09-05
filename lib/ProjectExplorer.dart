@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:project_tracker_test/ResponseObjects.dart';
 import 'package:project_tracker_test/Admin.dart';
+import 'package:project_tracker_test/Images.dart';
 import 'package:project_tracker_test/Overview.dart';
 import 'package:project_tracker_test/Settings.dart';
 import 'package:project_tracker_test/User.dart';
@@ -166,6 +167,17 @@ class _MyProjectExplorerState extends State<MyProjectExplorer> {
               onTap: () {
                 setState(() {
                   _route = Overview(_liveProject);
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              selected: _route.toString() == Images().toString(),
+              leading: Icon(Icons.image),
+              title: Text("Images"),
+              onTap: () {
+                setState(() {
+                  _route = Images();
                 });
                 Navigator.pop(context);
               },

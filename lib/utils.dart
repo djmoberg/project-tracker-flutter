@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:async/async.dart';
+import 'package:path/path.dart';
 import 'package:project_tracker_test/ResponseObjects.dart';
 import 'package:project_tracker_test/Prefs.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-const backend2 = "https://project-tracker-backend.herokuapp.com";
-const backend = "http://192.168.38.110:3000";
+const backend = "https://project-tracker-backend.herokuapp.com";
+const backend2 = "http://192.168.38.110:3000";
 
 class Cookie {
   static Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -386,4 +389,76 @@ Future updateProject(Map<String, dynamic> data) async {
   } else {
     throw Exception("Failed to update project");
   }
+}
+
+Future<bool> upload(File imageFile, String folder) async {
+  // open a bytestream
+  var stream =
+      new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+  // get file length
+  var length = await imageFile.length();
+
+  // string to uri
+  // var uri = Uri.parse(backend + "/project/image");
+  var uri = Uri.parse(
+      "https://api.cloudinary.com/v1_1/dgtbkecfm/image/upload?api_key=181484295384343&upload_preset=jrwtxegn&folder=" +
+          folder);
+
+  // create multipart request
+  var request = new http.MultipartRequest("POST", uri);
+
+  // multipart that takes file
+  var multipartFile = new http.MultipartFile('file', stream, length,
+      filename: basename(imageFile.path));
+
+  // add file to multipart
+  request.files.add(multipartFile);
+
+  // send
+  var response = await request.send();
+  print(response.statusCode);
+
+  Stream<String> responseStream = response.stream.transform(utf8.decoder);
+
+  await for (String value in responseStream) {
+    print(value);
+    Map<String, dynamic> res = json.decode(value);
+    await sendImageUrl({"imageUrl": res["url"]});
+  }
+
+  // listen for response
+  // response.stream.transform(utf8.decoder).listen((value) async {
+  //   print(value);
+  //   Map<String, dynamic> res = json.decode(value);
+  //   await sendImageUrl({"imageUrl": res["url"]});
+  // });
+
+  return response.statusCode == 200;
+}
+
+Future sendImageUrl(Map<String, dynamic> data) async {
+  http.Response response = await http.post(backend + "/project/image",
+      headers: {
+        "cookie": await Cookie.getCookie(),
+        "Content-Type": "application/json"
+      },
+      body: json.encode(data));
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to send image url");
+  }
+}
+
+Future<List<dynamic>> getImages() async {
+  List<dynamic> images;
+  http.Response response = await http.get(backend + "/project/images",
+      headers: {"cookie": await Cookie.getCookie()});
+  if (response.statusCode == 200) {
+    images = json.decode(response.body);
+    // print(projects.projects);
+  } else {
+    throw Exception("Failed to load images");
+  }
+  return images;
 }
