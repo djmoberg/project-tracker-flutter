@@ -462,3 +462,27 @@ Future<List<dynamic>> getImages() async {
   }
   return images;
 }
+
+Future addUser(Map<String, dynamic> data) async {
+  http.Response response = await http.post(backend + "/project/addUser",
+      headers: {
+        "cookie": await Cookie.getCookie(),
+        "Content-Type": "application/json"
+      },
+      body: json.encode(data));
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to add user");
+  }
+}
+
+Future deleteProject() async {
+  http.Response response = await http.delete(backend + "/project",
+      headers: {"cookie": await Cookie.getCookie()});
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    throw Exception("Failed to delete project");
+  }
+}

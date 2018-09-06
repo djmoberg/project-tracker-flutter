@@ -40,6 +40,7 @@ class _MyChooseProjectState extends State<MyChooseProject> {
   _MyChooseProjectState(this._projects, this._onLogout, this._update);
 
   bool loading = false;
+  List<Map<String, dynamic>> _liveProjects;
 
   Future _openProjectExplorer(id) async {
     setState(() {
@@ -47,13 +48,20 @@ class _MyChooseProjectState extends State<MyChooseProject> {
     });
     Project project = await getProject(id);
     await Prefs().setSelectedProject(id);
+    Prefs().setProjectName(project.name);
     setState(() {
       loading = false;
     });
-    await Navigator.push(context, MaterialPageRoute(builder: (context) {
+    bool remove =
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return ProjectExplorer(project, _onLogout, _update);
     }));
     Prefs().setSelectedProject(null);
+    if (remove != null && remove) {
+      setState(() {
+        _liveProjects.removeWhere((pro) => pro["id"] == id);
+      });
+    }
   }
 
   @override
@@ -63,6 +71,7 @@ class _MyChooseProjectState extends State<MyChooseProject> {
     if (selectedProject != null) {
       _openProjectExplorer(selectedProject);
     }
+    _liveProjects = _projects;
   }
 
   @override
@@ -71,11 +80,12 @@ class _MyChooseProjectState extends State<MyChooseProject> {
         ? Center(child: CircularProgressIndicator())
         : ListView.builder(
             padding: EdgeInsets.all(16.0),
-            itemCount: _projects.length,
+            itemCount: _liveProjects.length,
             itemBuilder: (context, index) {
               return ListTile(
-                  title: Center(child: Text(_projects[index]["name"])),
-                  onTap: () => _openProjectExplorer(_projects[index]["id"]));
+                  title: Center(child: Text(_liveProjects[index]["name"])),
+                  onTap: () =>
+                      _openProjectExplorer(_liveProjects[index]["id"]));
             },
           );
   }

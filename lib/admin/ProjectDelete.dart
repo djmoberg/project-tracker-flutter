@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_tracker_test/admin/ProjectDeleteDialog.dart';
 
 class ProjectDelete extends StatelessWidget {
   @override
@@ -6,7 +7,10 @@ class ProjectDelete extends StatelessWidget {
     return RaisedButton(
       color: Colors.red,
       child: Text("Delete"),
-      onPressed: () {},
+      onPressed: () {
+        showDialog(
+            context: context, builder: (context) => ProjectDeleteDialog());
+      },
     );
   }
 }
