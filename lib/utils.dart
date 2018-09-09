@@ -10,7 +10,7 @@ import 'package:project_tracker_test/Prefs.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-const backend = "https://project-tracker-backend.herokuapp.com";
+const backend = "https://project-tracker-backend2.herokuapp.com";
 const backend2 = "http://192.168.38.110:3000";
 
 class Cookie {
@@ -251,7 +251,8 @@ Future<List<DeletedWork>> getDeletedWork() async {
 
 Future deleteTrash(int id) async {
   http.Response response = await http.delete(
-      backend + "/work/flutterTrash/" + id.toString(),
+      // backend + "/work/flutterTrash/" + id.toString(),
+      backend + "/work/trash/" + id.toString(),
       headers: {"cookie": await Cookie.getCookie()});
   if (response.statusCode == 200) {
     print(response.body);
@@ -279,7 +280,8 @@ Future<bool> moveToTrash(Map<String, dynamic> data) async {
 Future deleteWork(int id) async {
   RAdd res;
   http.Response response = await http.delete(
-      backend + "/work/flutterDelete/" + id.toString(),
+      // backend + "/work/flutterDelete/" + id.toString(),
+      backend + "/work/delete/" + id.toString(),
       headers: {"cookie": await Cookie.getCookie()});
   if (response.statusCode == 200) {
     res = RAdd.fromJson(json.decode(response.body));
@@ -318,7 +320,8 @@ Future sendJoinRequest(Map<String, dynamic> data) async {
 
 Future deleteJoinRequest(String id) async {
   http.Response response = await http.delete(
-    backend + "/user/flutterPendingJoinRequest/" + id,
+    // backend + "/user/flutterPendingJoinRequest/" + id,
+    backend + "/user/pendingJoinRequest/" + id,
     headers: {"cookie": await Cookie.getCookie()},
   );
   if (response.statusCode == 200) {
@@ -343,7 +346,8 @@ Future<List<dynamic>> getJoinRequests() async {
 
 Future removeUser(String username) async {
   http.Response response = await http.delete(
-      backend + "/project/flutterRemoveUser/" + username,
+      // backend + "/project/flutterRemoveUser/" + username,
+      backend + "/project/removeUser/" + username,
       headers: {"cookie": await Cookie.getCookie()});
   if (response.statusCode == 200) {
     print(response.body);
@@ -368,7 +372,8 @@ Future makeAdmin(Map<String, dynamic> data) async {
 
 Future deleteProjectJoinRequest(int userId) async {
   http.Response response = await http.delete(
-      backend + "/project/flutterJoinRequests/" + userId.toString(),
+      // backend + "/project/flutterJoinRequests/" + userId.toString(),
+      backend + "/project/joinRequests/" + userId.toString(),
       headers: {"cookie": await Cookie.getCookie()});
   if (response.statusCode == 200) {
     print(response.body);

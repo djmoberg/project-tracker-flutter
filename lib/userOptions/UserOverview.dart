@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_tracker_test/CustomCard.dart';
 
 import 'package:project_tracker_test/ResponseObjects.dart';
 import 'package:project_tracker_test/utils.dart';
@@ -203,31 +204,7 @@ class _MyUserOverviewState extends State<MyUserOverview> {
               String hours = getHours(data["workFrom"], data["workTo"]);
               String comment = data["comment"];
               return Dismissible(
-                child: Card(
-                  child: ListTile(
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        // Text(name),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(workDate),
-                            Text(time),
-                            Text(hours),
-                          ],
-                        ),
-                      ],
-                    ),
-                    subtitle: Text(comment),
-                    onTap: () {
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                        content: Text("TODO: edit"),
-                        duration: Duration(seconds: 1),
-                      ));
-                    },
-                  ),
-                ),
+                child: CustomCard(workDate, time, hours, comment),
                 key: Key(id.toString()),
                 background: Container(
                   color: Colors.red,
