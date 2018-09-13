@@ -44,44 +44,47 @@ class _MyCustomCardState extends State<MyCustomCard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ListTile(
-            leading: Text(_workDate),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(_time),
-                Text(_hours + " h"),
-              ],
-            ),
-            // subtitle: Text(_hours + " hours"),
-            trailing: _comment.length > 47
-                ? IconButton(
-                    icon:
-                        Icon(_expanded ? Icons.expand_less : Icons.expand_more),
-                    onPressed: () {
-                      setState(() {
-                        _expanded = !_expanded;
-                      });
-                    },
-                  )
-                : IconButton(
-                    icon: Icon(Icons.expand_more),
-                    onPressed: null,
-                  )
-            // onTap: () {},
-            ),
-        Padding(
-          padding: const EdgeInsets.only(left: 16.0, bottom: 16.0, right: 32.0),
-          child: Text(
-            _comment,
-            maxLines: _expanded ? null : 1,
-            overflow: TextOverflow.fade,
+          leading: Text(_workDate),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(_time),
+              Text(_hours + " h"),
+            ],
           ),
-        )
+          // subtitle: Text(_hours + " hours"),
+          trailing: IconButton(
+            icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
+            onPressed: () {
+              setState(() {
+                _expanded = !_expanded;
+              });
+            },
+          ),
+          // onTap: () {},
+        ),
+        Padding(
+            padding: EdgeInsets.only(left: 16.0, bottom: 16.0, right: 32.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  _comment,
+                  maxLines: _expanded ? null : 1,
+                  overflow: TextOverflow.fade,
+                ),
+                _expanded
+                    ? OutlineButton(
+                        child: Text("Edit"),
+                        onPressed: () {},
+                      )
+                    : SizedBox()
+              ],
+            ))
       ],
     ));
   }
 }
-
 
 // Card(
 //                   child: ListTile(

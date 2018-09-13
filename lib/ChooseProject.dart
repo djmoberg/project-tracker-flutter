@@ -82,10 +82,17 @@ class _MyChooseProjectState extends State<MyChooseProject> {
             padding: EdgeInsets.all(16.0),
             itemCount: _liveProjects.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                  title: Center(child: Text(_liveProjects[index]["name"])),
-                  onTap: () =>
-                      _openProjectExplorer(_liveProjects[index]["id"]));
+              return Column(
+                children: <Widget>[
+                  ListTile(
+                      title: Text(_liveProjects[index]["name"]),
+                      subtitle: Text(_liveProjects[index]["description"]),
+                      trailing: Icon(Icons.keyboard_arrow_right),
+                      onTap: () =>
+                          _openProjectExplorer(_liveProjects[index]["id"])),
+                  index != (_liveProjects.length - 1) ? Divider() : SizedBox()
+                ],
+              );
             },
           );
   }

@@ -38,9 +38,13 @@ class _MyUserState extends State<MyUser> {
       body: UserOverview(_project, _updateOverview),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(context,
+        onPressed: () async {
+          var added = await Navigator.push(context,
               MaterialPageRoute(builder: (context) => Add(_updateOverview)));
+          if (added != null && added) {
+            Scaffold.of(context)
+                .showSnackBar(SnackBar(content: Text("Work added")));
+          }
         },
       ),
     );

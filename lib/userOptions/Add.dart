@@ -330,13 +330,14 @@ class _MyAddState extends State<MyAdd> {
                     setState(() {
                       _loading = true;
                     });
-                    RAdd res = await addWork({
+                    var workObject = {
                       "addedUsers": [],
                       "comment": _comment,
                       "workDate": convertDateBackend(_date),
                       "workFrom": "${withZero(fromH)}:${withZero(fromM)}",
                       "workTo": "${withZero(toH)}:${withZero(toM)}"
-                    });
+                    };
+                    RAdd res = await addWork(workObject);
                     Prefs().setOverview(res.overview);
                     _updateOverview();
                     setState(() {
@@ -349,8 +350,7 @@ class _MyAddState extends State<MyAdd> {
                       _loading = false;
                     });
                     _controller.clear();
-                    Scaffold.of(context)
-                        .showSnackBar(SnackBar(content: Text("Work added")));
+                    Navigator.pop(context, true);
                   },
           ),
         ],
